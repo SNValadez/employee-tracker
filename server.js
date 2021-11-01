@@ -33,7 +33,8 @@ const viewDepartment = () => {
     "SELECT * FROM department",
       function(err, results) {
         console.log(err);
-        console.log(results);
+        console.table(results);
+        beginPrompt();
       }
   )
 };
@@ -43,10 +44,47 @@ const viewRoles = () => {
     "SELECT * FROM role",
       function(err, results) {
         console.log(err);
-        console.log(results);
+        console.table(results);
+        beginPrompt();
       }
   )
 };
+
+
+const addRole = () => { 
+  connection.query("SELECT role.title AS title, role.salary AS salary FROM role",   
+  function(err, results) {
+    console.log(err);
+    console.table(results);
+    inquirer.prompt([
+        {
+          name: "title",
+          type: "input",
+          message: "What is the role title?"
+        },
+        {
+          name: "salary",
+          type: "input",
+          message: "What is salary?"
+
+        } 
+    ]).then(function(results) {
+        connection.query(
+            "INSERT INTO role SET ?",
+            {
+              title: results.Title,
+              salary: results.Salary,
+            },
+            function(err) {
+                if (err) throw err
+                console.table(results);
+                beginPrompt();
+            }
+        )
+
+    });
+  });
+  }
 // let array = [{
 //     name: 'foo',
 //     age: 10
@@ -66,8 +104,8 @@ function beginPrompt() {
         message: "What would you like to do?",
         name: "query",
         type: "list",
-        choices: ["View Employees", "View Employees By Department", 
-                  "View Employees By Role", "Update an Employee", "Add an Employee",
+        choices: ["View Employees", "View Departments", 
+                  "View Roles", "Update an Employee", "Add an Employee",
                    "Add a Department", "Add a Role"]
     },
   ])
@@ -79,10 +117,10 @@ function beginPrompt() {
       case "View Employees": viewEmployees();
       break;
 
-      case "View Employees By Department": viewDepartment();
+      case "View Departments": viewDepartment();
       break;
 
-      case "View Employees By Roles": viewRoles();
+      case "View Roles": viewRoles();
       break;
 
       case "Update an Employee": updateEmployee();
