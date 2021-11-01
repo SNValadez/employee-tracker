@@ -17,9 +17,29 @@ connection.query(
     }
 )
 
+const viewEmployees = () => {
+  connection.query(
+    "SELECT * FROM employee",
+      function(err, results) {
+        console.log(err);
+        console.log(results);
+      }
+  )
+};
+
 const viewDepartment = () => {
   connection.query(
     "SELECT * FROM department",
+      function(err, results) {
+        console.log(err);
+        console.log(results);
+      }
+  )
+};
+
+const viewRoles = () => {
+  connection.query(
+    "SELECT * FROM role",
       function(err, results) {
         console.log(err);
         console.log(results);
@@ -74,8 +94,6 @@ inquirer
 
       case "Add a role": addRole();
       break;
-
-      default: viewRoles();
     }
 
   });
