@@ -9,20 +9,21 @@ const connection = mysql.createConnection({
   database: 'employees'
 });
 
-connection.query(
-  "SELECT * FROM department",
-    function(err, results) {
-      //console.log(err);
-      //console.log(results);
-    }
-)
+// connection.query(
+//   "SELECT * FROM department",
+//     function(err, results) {
+//       //console.log(err);
+//       //console.log(results);
+//     }
+// )
 
 const viewEmployees = () => {
   connection.query(
     "SELECT * FROM employee",
       function(err, results) {
         console.log(err);
-        console.log(results);
+        console.table(results);
+        beginPrompt();
       }
   )
 };
@@ -58,7 +59,8 @@ const viewRoles = () => {
 // console.warn();
 // console.error();
 
-inquirer
+function beginPrompt() {
+  inquirer
   .prompt([
     { 
         message: "What would you like to do?",
@@ -97,5 +99,7 @@ inquirer
     }
 
   });
+};
 
+beginPrompt();
   // view all employees function, use javascript to hook into mysql
